@@ -11,7 +11,8 @@ serv.listen(2000);
 console.log("Server started.");
  
 var SOCKET_LIST = {};
- 
+var POINT_WIDTH = 10;
+
 var Entity = function(){
     var self = {
         x:250,
@@ -41,7 +42,6 @@ var Player = function(id){
     self.pressingLeft = false;
     self.pressingUp = false;
     self.pressingDown = false;
-    self.pressingAttack = false;
     self.mouseAngle = 0;
     self.maxSpd = 10;
    
@@ -49,17 +49,8 @@ var Player = function(id){
     self.update = function(){
         self.updateSpd();
         super_update();
-       
-        if(self.pressingAttack){
-            self.shootBullet(self.mouseAngle);
-        }
     }
-    self.shootBullet = function(angle){
-        var b = Bullet(self.id,angle);
-        b.x = self.x;
-        b.y = self.y;
-    }
-   
+
    
     self.updateSpd = function(){
         if(self.pressingRight)
@@ -91,8 +82,6 @@ Player.onConnect = function(socket){
             player.pressingUp = data.state;
         else if(data.inputId === 'down')
             player.pressingDown = data.state;
-        else if(data.inputId === 'attack')
-            player.pressingAttack = data.state;
         else if(data.inputId === 'mouseAngle')
             player.mouseAngle = data.state;
     });
@@ -114,104 +103,15 @@ Player.update = function(){
     return pack;
 }
  
- 
-var Bullet = function(parent,angle){
-    var self = Entity();
-    self.id = Math.random();
-    self.spdX = Math.cos(angle/180*Math.PI) * 10;
-    self.spdY = Math.sin(angle/180*Math.PI) * 10;
-    self.parent = parent;
-    self.timer = 0;
-    self.toRemove = false;
-    var super_update = self.update;
-    self.update = function(){
-        if(self.timer++ > 100)
-            self.toRemove = true;
-        super_update();
-       
-        for(var i in Player.list){
-            var p = Player.list[i];
-            if(self.getDistance(p) < 32 && self.parent !== p.id){
-                //handle collision. ex: hp--;
-                self.toRemove = true;
-            }
-        }
-    }
-    Bullet.list[self.id] = self;
-    return self;
-}
-Bullet.list = {};
- 
-Bullet.update = function(){
-    var pack = [];
-    for(var i in Bullet.list){
-        var bullet = Bullet.list[i];
-        bullet.update();
-        if(bullet.toRemove)
-            delete Bullet.list[i];
-        else
-            pack.push({
-                x:bullet.x,
-                y:bullet.y,
-            });    
-    }
-    return pack;
-}
- 
 var DEBUG = true;
  
-var USERS = {
-    //username:password
-    "bob":"asd",
-    "bob2":"bob",
-    "bob3":"ttt",  
-}
- 
-var isValidPassword = function(data,cb){
-    setTimeout(function(){
-        cb(USERS[data.username] === data.password);
-    },10);
-}
-var isUsernameTaken = function(data,cb){
-    setTimeout(function(){
-        cb(USERS[data.username]);
-    },10);
-}
-var addUser = function(data,cb){
-    setTimeout(function(){
-        USERS[data.username] = data.password;
-        cb();
-    },10);
-}
  
 var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
    
-    socket.on('signIn',function(data){
-        isValidPassword(data,function(res){
-            if(res){
-                Player.onConnect(socket);
-                socket.emit('signInResponse',{success:true});
-            } else {
-                socket.emit('signInResponse',{success:false});         
-            }
-        });
-    });
-    socket.on('signUp',function(data){
-        isUsernameTaken(data,function(res){
-            if(res){
-                socket.emit('signUpResponse',{success:false});     
-            } else {
-                addUser(data,function(){
-                    socket.emit('signUpResponse',{success:true});                  
-                });
-            }
-        });    
-    });
-   
-   
+
     socket.on('disconnect',function(){
         delete SOCKET_LIST[socket.id];
         Player.onDisconnect(socket);
@@ -230,14 +130,15 @@ io.sockets.on('connection', function(socket){
         socket.emit('evalAnswer',res);     
     });
    
-   
+    Player.onConnect(socket);
+
    
 });
- 
+
+
 setInterval(function(){
     var pack = {
         player:Player.update(),
-        bullet:Bullet.update(),
     }
    
     for(var i in SOCKET_LIST){

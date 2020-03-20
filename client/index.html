@@ -25,11 +25,14 @@
             ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25,data.player[i].snakey[0]*25);      
 
             for (var i2 in data.player[i].snakex) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = "black";
+                ctx.beginPath();
+                ctx.strokeStyle = "black";
 
-                    ctx.rect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);
+                ctx.rect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);
                     
+                if(i2 == 0)
+                    ctx.fill();
+                else
                     ctx.stroke();
                          
             } 

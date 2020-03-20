@@ -1,0 +1,50 @@
+JAVASCRIPT SNAKE ONLINE GAME
+--------------------------------
+
+Prüfen des Kopfes auf Kollision mit anderem Teil der Schlange
+
+
+Server:
+----------------
+
+GLOBALE VARIABLE:
+width...............Breite des Frames
+height..............Hoehe des Frames
+pq..................Groesse eines Punktes
+maxlaenge...........Laenge die maximal erreicht werden kann
+SOCKET_LIST
+
+
+OBJECT
+Player:
+	x
+	y
+	xplus
+	yplus
+	snakex:Array
+	snakey:Array
+	laenge
+	score
+	
+	UPDATE:
+	
+	CHECKCOLLISION
+	
+	MOVE
+	
+	
+	
+	
+	
+	
+Goal:
+	px:Random
+	py:Random
+
+
+
+
+
+
+Client:
+----------------

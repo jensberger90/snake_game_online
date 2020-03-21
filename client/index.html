@@ -1,10 +1,12 @@
 
-<div id="gameDiv" style="inline-block">
+<div id="gameDiv" style="display: inline-block;">
     <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
- 
-
 </div>
- 
+
+<div id="scoreBoard">
+    
+</div>
+
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script>
     var socket = io();
@@ -15,36 +17,41 @@
 
     var ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = '12px Arial';
-       
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
     socket.on('newPositions',function(data){
         ctx.clearRect(0,0,500,500);
-
-        console.log(data);
         
         for(var i = 0 ; i < data.player.length; i++){
-            ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25,data.player[i].snakey[0]*25);      
+
+
+
 
             for (var i2 in data.player[i].snakex) {
-                ctx.beginPath();
-                ctx.strokeStyle = "black";
-
-                ctx.rect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);
-                    
-                if(i2 == 0)
-                    ctx.fill();
-                else
-                    ctx.stroke();
-                         
+                ctx.fillStyle = "red";
+                ctx.fillRect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);         
             } 
+
+            //+(25-ctx.measureText(data.player.score).width)/2
+            ctx.fillStyle = "white"
+            
+            if(data.player[i].xplus == 1) //right
+                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5  ,data.player[i].snakey[0]*25+12.5);      
+            else if(data.player[i].xplus == -1) //left
+                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
+            else if(data.player[i].yplus == -1) //down
+                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
+            else if(data.player[i].yplus == 1) //up
+                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
+
         }
 
 
         
         // Red rectangle
-        ctx.beginPath();
         ctx.strokeStyle = "red";
-        ctx.rect(data.goal.px*25, data.goal.py*25, 25, 25);
-        ctx.stroke();
+        ctx.strokeRect(data.goal.px*25, data.goal.py*25, 25, 25);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
             

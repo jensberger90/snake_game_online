@@ -16,9 +16,22 @@ var SOCKET_LIST = {};
 var WIDTH = 500;
 var HEIGHT = 500;
 var pq = 25;
+var target = new Target();
+target.generate();
 
-var px = getRandomInt(1, (WIDTH/pq)-1); 
-var py = getRandomInt(1, (HEIGHT/pq)-1);
+
+
+function Target(){
+    this.px;
+    this.py;
+
+    this.generate = function(params) {
+        this.px = getRandomInt(1, (WIDTH/pq)-1); 
+        this.py = getRandomInt(1, (HEIGHT/pq)-1);
+    }
+
+}
+
 
 function Player(id)
 {
@@ -72,7 +85,7 @@ function Player(id)
         }
 
         //punkt einsammeln
-        if(this.x == px && this.y == py){
+        if(this.x == target.px && this.y == target.py){
             this.laenge = this.laenge + 1;
 
             //this.snakex[this.laenge] = this.snakex[this.laenge-1];
@@ -86,8 +99,7 @@ function Player(id)
 
             //console.log("catch" + px + " "+ py);
 
-            px = getRandomInt(1, (WIDTH/pq)-1); 
-            py = getRandomInt(1, (HEIGHT/pq)-1);        }
+            target.generate();       }
 
         
         if(this.snakex.length > this.laenge){
@@ -113,18 +125,18 @@ onConnect = function(socket){
     PLAYER_LIST[player.id] = player;
 
     socket.on('keyPress',function(data){
-        if(data.inputId === 'left'){
+        if(data.inputId === 'left' & player.xplus != 1){
             player.xplus = -1;
             player.yplus = 0;
-        }else if(data.inputId === 'right'){
+        }else if(data.inputId === 'right' & player.xplus != -1){
             player.xplus = 1;
             player.yplus = 0;        
         }
-        else if(data.inputId === 'up'){
+        else if(data.inputId === 'up' & player.yplus != 1){
             player.xplus = 0;
             player.yplus = -1;        
         }
-        else if(data.inputId === 'down'){
+        else if(data.inputId === 'down' & player.yplus != -1){
             player.xplus = 0;
             player.yplus = 1;        
         }
@@ -164,16 +176,15 @@ setInterval(function(){
             data.push({
                 snakex:player.snakex,
                 snakey:player.snakey,
+                xplus:player.xplus,
+                yplus:player.yplus,
                 score:player.laenge,
             });    
         }
     
     var pack = {
         player:data,
-        goal:{
-            px,
-            py,
-        },
+        goal:target,
     }
    
     for(var i in SOCKET_LIST){

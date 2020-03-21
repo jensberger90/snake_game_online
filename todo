@@ -27,9 +27,7 @@ Player:
 	score
 	
 	UPDATE:
-	
-	CHECKCOLLISION
-	
+		
 	MOVE
 	
 	

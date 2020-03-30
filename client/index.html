@@ -1,13 +1,39 @@
 
-<div id="gameDiv" style="display: inline-block;">
-    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
-</div>
+<div id="gameDiv" class="gameDiv" style="display: none;">
+    <div class="container-left">
+            <div id="scoreBoard" class="board">
+            </div>
+    </div>
 
-<div id="scoreBoard">
-    
+    <div class="container-middle">
+        <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+    </div>
+
+    <div class="container-right">
+        <div id="chat-text" class="chat" style="width:100%;height:500px">
+            <div>Hello!</div>
+            
+        </div>
+        <form id="chat-form" >
+            <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
+        </form>
+    </div>
+
 </div>
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<link rel="stylesheet" href="/client/clients.css">
+
+<div id="signDiv">
+    <input id="signDiv-username" type="text" placeholder="Name" required></input><br>
+    <button class="button" id="signDiv-signIn">Los Gehts</button>
+</div>
+
+
+
+
+
+
 <script>
     var socket = io();
    
@@ -16,6 +42,30 @@
     //game
 
     var ctx = document.getElementById("ctx").getContext("2d");
+    var signDiv = document.getElementById('signDiv');
+    var signDivUsername = document.getElementById('signDiv-username');
+    var signDivSignIn = document.getElementById('signDiv-signIn');
+
+
+
+
+
+    signDivSignIn.onclick = function(){
+        if(signDivUsername.value != "")
+            socket.emit('signIn',{name:signDivUsername.value});
+        else
+            alert("Gib einen Namen an!");
+    }
+
+    socket.on('signInResponse',function(data){
+        if(data.success){
+            signDiv.style.display = 'none';
+            gameDiv.style.display = 'flex';
+        } else
+            alert("Die maximale Spielerzahl auf dem Server ist erreicht.");
+    });
+
+
     ctx.font = '12px Arial';
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -26,31 +76,26 @@
         for(var i = 0 ; i < data.player.length; i++){
 
 
+            var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
 
-
+            console.log(color);
             for (var i2 in data.player[i].snakex) {
-                ctx.fillStyle = "red";
+                ctx.fillStyle = color;
                 ctx.fillRect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);         
             } 
+
 
             //+(25-ctx.measureText(data.player.score).width)/2
             ctx.fillStyle = "white"
             
-            if(data.player[i].xplus == 1) //right
-                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5  ,data.player[i].snakey[0]*25+12.5);      
-            else if(data.player[i].xplus == -1) //left
-                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
-            else if(data.player[i].yplus == -1) //down
-                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
-            else if(data.player[i].yplus == 1) //up
-                ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5,data.player[i].snakey[0]*25 + 12.5);      
+            ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5  ,data.player[i].snakey[0]*25+12.5);      
 
         }
 
 
         
         // Red rectangle
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "black";
         ctx.strokeRect(data.goal.px*25, data.goal.py*25, 25, 25);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     

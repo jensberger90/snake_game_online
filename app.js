@@ -19,7 +19,26 @@ var pq = 25;
 var target = new Target();
 target.generate();
 
+COLORS = [
+    {r:74, g:1, b:122},
+    {r:146, g:165, b:216},
+    {r:249, g:28, b:128},
+    {r:214, g:67, b:45},
+    {r:195, g:141, b:163},
+    {r:16, g:30, b:87},
+    {r:71, g:153, b:173},
+    {r:209, g:180, b:73},
+    {r:153, g:180, b:153},
+]
 
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
 function Target(){
     this.px;
@@ -44,7 +63,8 @@ function Player(id)
     this.snakey = [];
     this.laenge = 5;
     this.score = 0;
-
+    this.name;
+    this.color;
 
 
     this.initialize = function() {
@@ -117,9 +137,14 @@ function Player(id)
 
 
 
-onConnect = function(socket){
+onConnect = function(socket, name){
     var player = new Player(socket.id);
     
+    player.name = name;
+
+    var rand = getRandomInt(0, COLORS.length);
+    player.color = COLORS[rand];
+
     player.initialize();
 
     PLAYER_LIST[player.id] = player;
@@ -164,7 +189,18 @@ var io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
     socket.id = Math.random();
     SOCKET_LIST[socket.id] = socket;
-    onConnect(socket);
+
+    socket.on('signIn',function(data){
+        console.log(Object.size(PLAYER_LIST));
+        if(Object.size(PLAYER_LIST) < 4){
+            onConnect(socket, data.name);
+            socket.emit('signInResponse',{success:true});  
+        } else {
+            socket.emit('signInResponse',{success:false});
+        }
+        
+    });
+    
 });
 
 
@@ -179,6 +215,7 @@ setInterval(function(){
                 xplus:player.xplus,
                 yplus:player.yplus,
                 score:player.laenge,
+                color:player.color,
             });    
         }
     

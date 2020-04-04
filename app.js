@@ -99,19 +99,18 @@ function Player(id)
         //kollision innerhalb der schlange
        for (var i = 1; i < this.laenge; i++) {
             if(this.snakex[0] == this.snakex[i] && this.snakey[0] == this.snakey[i]){
-                this.laenge = 5;
-                this.score = 0;
+                playerDeath(this);
             }
         }
 
         //punkt einsammeln
         if(this.x == target.px && this.y == target.py){
             this.laenge = this.laenge + 1;
-
+            this.score += 1;
             //this.snakex[this.laenge] = this.snakex[this.laenge-1];
             //this.snakey[this.laenge] = this.snakey[this.laenge-1];
              
-
+            //Schlange neu ins Array einlesen
             for (var i = this.laenge-1; i > this.laenge; i++) {
                 this.snakex[i] = this.snakex[i - 1];
                 this.snakey[i] = this.snakey[i - 1];            
@@ -119,7 +118,8 @@ function Player(id)
 
             //console.log("catch" + px + " "+ py);
 
-            target.generate();       }
+            target.generate();  
+        }
 
         
         if(this.snakex.length > this.laenge){
@@ -134,7 +134,11 @@ function Player(id)
 
 
 
-
+playerDeath = function(player){
+    console.log("Your Score is: "+player.score);
+    player.laenge = 5;
+    player.score = 0;
+}
 
 
 onConnect = function(socket, name){
@@ -191,8 +195,7 @@ io.sockets.on('connection', function(socket){
     SOCKET_LIST[socket.id] = socket;
 
     socket.on('signIn',function(data){
-        console.log(Object.size(PLAYER_LIST));
-        if(Object.size(PLAYER_LIST) < 4){
+        if(Object.size(PLAYER_LIST) < 3){
             onConnect(socket, data.name);
             socket.emit('signInResponse',{success:true});  
         } else {
@@ -214,7 +217,7 @@ setInterval(function(){
                 snakey:player.snakey,
                 xplus:player.xplus,
                 yplus:player.yplus,
-                score:player.laenge,
+                score:player.score,
                 color:player.color,
             });    
         }

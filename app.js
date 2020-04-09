@@ -44,10 +44,19 @@ Object.size = function(obj) {
 function Target(){
     this.px;
     this.py;
+    this.time;
 
-    this.generate = function(params) {
+    this.update = function(){
+        this.time = this.time - 1;
+
+        if(this.time < 0)
+            this.generate();
+    }
+
+    this.generate = function() {
         this.px = getRandomInt(1, (WIDTH/pq)-1); 
         this.py = getRandomInt(1, (HEIGHT/pq)-1);
+        this.time = getRandomInt(30, 70);
     }
 
 }
@@ -210,6 +219,28 @@ io.sockets.on('connection', function(socket){
         }
         
     });
+
+    socket.on('sendMsgToServer',function(data){
+        var playerName = PLAYER_LIST[socket.id].name;
+        var playerColor = PLAYER_LIST[socket.id].color;
+        var str = playerName + ': ' + data
+
+        var msg = {
+            str:str,
+            color:playerColor,
+        }
+
+        for(var i in SOCKET_LIST){
+            SOCKET_LIST[i].emit('addToChat',msg);
+        }
+    });
+   
+    socket.on('evalServer',function(data){
+        if(!DEBUG)
+            return;
+        var res = eval(data);
+        socket.emit('evalAnswer',res);     
+    });
     
 });
 
@@ -219,6 +250,7 @@ setInterval(function(){
         for(var i in PLAYER_LIST){
             var player = PLAYER_LIST[i];
             player.update();
+            target.update();
             data.push({
                 snakex:player.snakex,
                 snakey:player.snakey,

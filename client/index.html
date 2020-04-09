@@ -10,13 +10,9 @@
     </div>
 
     <div class="container-right">
-        <div id="chat-text" class="chat" style="width:100%;height:500px">
-            <div>Hello!</div>
-            
+        <div id="chat-text" class="chat" style="width:100%;height:500px">            
         </div>
-        <form id="chat-form" >
-            <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
-        </form>
+        <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
     </div>
 
 </div>
@@ -34,12 +30,9 @@
 
 
 
-
 <script>
     var socket = io();
-   
     
- 
     //game
 
     var ctx = document.getElementById("ctx").getContext("2d");
@@ -48,7 +41,8 @@
     var signDivSignIn = document.getElementById('signDiv-signIn');
 
 
-
+    var chatText = document.getElementById('chat-text');
+    var chatInput = document.getElementById('chat-input');
 
     signDivSignIn.onclick = function(){
         signIn();
@@ -108,6 +102,8 @@
         // Red rectangle
         ctx.strokeStyle = "black";
         ctx.strokeRect(data.goal.px*25, data.goal.py*25, 25, 25);
+        ctx.fillStyle = "black"
+        ctx.fillText(Math.floor(data.goal.time/10),data.goal.px*25+12.5 ,data.goal.py*25+12.5);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
             
@@ -116,7 +112,26 @@
     });
    
 
+    socket.on('addToChat',function(data){
+        chatText.innerHTML += '<div style="color: rgb('+data.color.r +','+data.color.g +','+data.color.b+')">' + data.str + '</div>';
+    });
+
+    socket.on('evalAnswer',function(data){
+        console.log(data);
+    });
    
+   
+    chatInput.onkeydown = function(e){
+        if(e.keyCode == 13){
+
+            e.preventDefault();
+            if(chatInput.value[0] === '/')
+                socket.emit('evalServer',chatInput.value.slice(1));
+            else
+                socket.emit('sendMsgToServer',chatInput.value);
+            chatInput.value = '';  
+        }    
+    }
 
     document.onkeydown = function(event){
         if(event.keyCode === 68)    //d
@@ -132,7 +147,5 @@
 
 
    
-   
-   
-   
+
 </script>

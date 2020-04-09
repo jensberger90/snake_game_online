@@ -17,6 +17,7 @@ var WIDTH = 500;
 var HEIGHT = 500;
 var pq = 25;
 var target = new Target();
+var maxPlayer = 3;
 target.generate();
 
 COLORS = [
@@ -149,6 +150,9 @@ onConnect = function(socket, name){
     var rand = getRandomInt(0, COLORS.length);
     player.color = COLORS[rand];
 
+    //Die Farbe des Spieler wird aus dem Array gelöscht, damit sie nicht doppelt vergeben wird
+    COLORS.splice(rand,1);
+
     player.initialize();
 
     PLAYER_LIST[player.id] = player;
@@ -179,6 +183,9 @@ onConnect = function(socket, name){
 }
 
 onDisconnect = function(socket){
+    //DIe Farbe darf neu vergeben werden
+    COLORS.push(PLAYER_LIST[socket.id].color);
+
     delete PLAYER_LIST[socket.id];
 }
 
@@ -195,7 +202,7 @@ io.sockets.on('connection', function(socket){
     SOCKET_LIST[socket.id] = socket;
 
     socket.on('signIn',function(data){
-        if(Object.size(PLAYER_LIST) < 3){
+        if(Object.size(PLAYER_LIST) < maxPlayer){
             onConnect(socket, data.name);
             socket.emit('signInResponse',{success:true});  
         } else {

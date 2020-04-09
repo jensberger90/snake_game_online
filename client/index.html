@@ -27,6 +27,7 @@
 <div id="signDiv">
     <input id="signDiv-username" type="text" placeholder="Name" required></input><br>
     <button class="button" id="signDiv-signIn">Los Gehts</button>
+    
 </div>
 
 
@@ -49,8 +50,18 @@
 
 
 
-
     signDivSignIn.onclick = function(){
+        signIn();
+    }
+
+    
+    signDivUsername.onkeydown = function(e){
+        if(e.keyCode == 13){
+            signIn();
+        }
+    }
+
+    function signIn(){
         if(signDivUsername.value != "")
             socket.emit('signIn',{name:signDivUsername.value});
         else

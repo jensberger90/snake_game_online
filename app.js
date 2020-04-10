@@ -19,6 +19,7 @@ var pq = 25;
 var target = new Target();
 var maxPlayer = 3;
 target.generate();
+var DEBUG = true;
 
 COLORS = [
     {r:74, g:1, b:122},

@@ -77,16 +77,18 @@
 
     socket.on('newPositions',function(data){
         ctx.clearRect(0,0,500,500);
-        
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,500,500);
+
         for(var i = 0 ; i < data.player.length; i++){
 
 
             var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
 
-            console.log(color);
+            //console.log(color);
             for (var i2 in data.player[i].snakex) {
                 ctx.fillStyle = color;
-                ctx.fillRect(data.player[i].snakex[i2]*25,data.player[i].snakey[i2]*25,25,25);         
+                ctx.fillRect(data.player[i].snakex[i2]*25+1,data.player[i].snakey[i2]*25+1,23,23);         
             } 
 
 
@@ -100,9 +102,9 @@
 
         
         // Red rectangle
-        ctx.strokeStyle = "black";
-        ctx.strokeRect(data.goal.px*25, data.goal.py*25, 25, 25);
-        ctx.fillStyle = "black"
+        ctx.strokeStyle = "white";
+        ctx.strokeRect(data.goal.px*25+1, data.goal.py*25+1, 23, 23);
+        ctx.fillStyle = "white"
         ctx.fillText(Math.floor(data.goal.time/10),data.goal.px*25+12.5 ,data.goal.py*25+12.5);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     

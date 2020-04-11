@@ -55,8 +55,26 @@ function Target(){
     }
 
     this.generate = function() {
-        this.px = getRandomInt(1, (WIDTH/pq)-1); 
-        this.py = getRandomInt(1, (HEIGHT/pq)-1);
+        var check = false;
+
+        do {
+            check = false;
+
+            this.px = getRandomInt(1, (WIDTH/pq)-1); 
+            this.py = getRandomInt(1, (HEIGHT/pq)-1);
+    
+            for(var i in PLAYER_LIST){
+                var player = PLAYER_LIST[i];
+                
+                if(player.snakex.indexOf(this.px) != -1)
+                    console.log(player.snakex.indexOf(this.px));
+                    if(this.py == player.snakey[player.snakex.indexOf(this.px)])
+                        check=true;
+            }
+
+        } while (check)
+
+
         this.time = getRandomInt(30, 70);
     }
 

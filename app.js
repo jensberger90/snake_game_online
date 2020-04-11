@@ -67,7 +67,6 @@ function Target(){
                 var player = PLAYER_LIST[i];
                 
                 if(player.snakex.indexOf(this.px) != -1)
-                    console.log(player.snakex.indexOf(this.px));
                     if(this.py == player.snakey[player.snakex.indexOf(this.px)])
                         check=true;
             }

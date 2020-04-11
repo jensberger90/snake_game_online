@@ -146,7 +146,18 @@ function Player(id)
 
 
 playerDeath = function(player){
-    console.log("Your Score is: "+player.score);
+    const fs = require('fs');
+
+    const data = player.name+": "+player.score+"\n";
+
+    fs.appendFile('highscore.txt', data, (err) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+
+        
     player.laenge = 5;
     player.score = 0;
 }

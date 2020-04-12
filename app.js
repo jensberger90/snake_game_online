@@ -18,11 +18,12 @@ var PLAYER_LIST = {};
 var SOCKET_LIST = {};
 var WIDTH = 500;
 var HEIGHT = 500;
-var pq = 25;
+var pq = 10;
 var target = new Target();
 var maxPlayer = 3;
 target.generate();
 var DEBUG = true;
+var PLAYERSTARTLENGTH = 5;
 
 var highscoredata;
 
@@ -59,6 +60,7 @@ function Target(){
     this.px;
     this.py;
     this.time;
+    this.starttime;
 
     this.update = function(){
         this.time = this.time - 1;
@@ -67,8 +69,9 @@ function Target(){
             this.generate();
     }
 
+
     this.generate = function() {
-        var check = false;
+        var check;
 
         do {
             check = false;
@@ -79,15 +82,27 @@ function Target(){
             for(var i in PLAYER_LIST){
                 var player = PLAYER_LIST[i];
                 
-                if(player.snakex.indexOf(this.px) != -1)
-                    if(this.py == player.snakey[player.snakex.indexOf(this.px)])
-                        check=true;
+                for(var i2 = 0; i2 < player.snakex.length; i2++){
+                    if(player.snakex[i2] == this.px && player.snakey[i2] == this.py){
+                        check = true;
+                        //console.log("collision -> x: "+this.px + " y: "+this.py);
+                    }
+                }/*
+                if(player.snakex.indexOf(this.px) != -1){
+                    
+                    if(this.py == player.snakey[player.snakex.indexOf(this.px)]){
+                        check = true;
+                        console.log("collision");
+                    }
+                }*/
             }
+            //console.log("check: " + check);    
 
         } while (check)
 
 
-        this.time = getRandomInt(30, 70);
+        this.starttime = getRandomInt(30, 70);
+        this.time = this.starttime;
     }
 
 }
@@ -102,7 +117,7 @@ function Player(id)
     this.yplus = 0;
     this.snakex = [];
     this.snakey = [];
-    this.laenge = 5;
+    this.laenge = PLAYERSTARTLENGTH;
     this.score = 0;
     this.name;
     this.color;
@@ -189,7 +204,7 @@ playerDeath = function(player){
     db.highscore.insert({name:player.name,score:player.score});
     updateHighscore();
     
-    player.laenge = 5;
+    player.laenge = PLAYERSTARTLENGTH;
     player.score = 0;
 }
 

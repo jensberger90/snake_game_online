@@ -73,9 +73,11 @@
     });
 
 
-    ctx.font = '12px Arial';
+    ctx.font = '8px Arial';
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
+
+    var pq = 10;
 
     socket.on('newPositions',function(data){
         ctx.clearRect(0,0,500,500);
@@ -90,23 +92,23 @@
             //console.log(color);
             for (var i2 in data.player[i].snakex) {
                 ctx.fillStyle = color;
-                ctx.fillRect(data.player[i].snakex[i2]*25+1,data.player[i].snakey[i2]*25+1,23,23);         
+                ctx.fillRect(data.player[i].snakex[i2]*pq+1,data.player[i].snakey[i2]*pq+1,pq-1,pq-1);         
             } 
 
 
             //+(25-ctx.measureText(data.player.score).width)/2
             ctx.fillStyle = "white"
             
-            ctx.fillText(data.player[i].score,data.player[i].snakex[0]*25 + 12.5  ,data.player[i].snakey[0]*25+12.5);      
+            ctx.fillText(data.player[i].score,data.player[i].snakex[0]*pq + pq/2  ,data.player[i].snakey[0]*pq+pq/2);      
 
         }
 
 
         // Red rectangle
         ctx.strokeStyle = "white";
-        ctx.strokeRect(data.goal.px*25+1, data.goal.py*25+1, 23, 23);
+        ctx.strokeRect(data.goal.px*pq+1, data.goal.py*pq+1, pq-1, pq-1);
         ctx.fillStyle = "white"
-        ctx.fillText(Math.floor(data.goal.time/10),data.goal.px*25+12.5 ,data.goal.py*25+12.5);
+        ctx.fillText(Math.floor(data.goal.time/10),data.goal.px*pq+pq/2 ,data.goal.py*pq+pq/2);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
             

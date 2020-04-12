@@ -57,10 +57,12 @@
     }
 
     function signIn(){
-        if(signDivUsername.value != "")
+        if(signDivUsername.value != ""){
+            alert("unstable");
             socket.emit('signIn',{name:signDivUsername.value});
-        else
+        } else {
             alert("Gib einen Namen an!");
+        }
     }
 
     socket.on('signInResponse',function(data){

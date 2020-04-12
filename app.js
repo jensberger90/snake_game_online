@@ -1,3 +1,6 @@
+//var mongojs = require("mongojs");
+//var db = mongojs('35.207.67.194:27017/snake_game', ['highscore']);
+ 
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);

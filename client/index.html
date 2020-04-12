@@ -58,7 +58,6 @@
 
     function signIn(){
         if(signDivUsername.value != ""){
-            alert("unstable");
             socket.emit('signIn',{name:signDivUsername.value});
         } else {
             alert("Gib einen Namen an!");

@@ -43,6 +43,7 @@
 
     var chatText = document.getElementById('chat-text');
     var chatInput = document.getElementById('chat-input');
+    var scoreBoard = document.getElementById('scoreBoard');
 
     signDivSignIn.onclick = function(){
         signIn();
@@ -100,7 +101,6 @@
         }
 
 
-        
         // Red rectangle
         ctx.strokeStyle = "white";
         ctx.strokeRect(data.goal.px*25+1, data.goal.py*25+1, 23, 23);

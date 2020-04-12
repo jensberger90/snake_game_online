@@ -24,6 +24,16 @@ var maxPlayer = 3;
 target.generate();
 var DEBUG = true;
 
+var highscoredata;
+
+updateHighscore = function(){
+    // find everything, but sort by name
+    db.highscore.find().sort({score: 1}, function (err, docs) {
+        highscoredata = docs;
+    })
+}
+
+
 COLORS = [
     {r:74, g:1, b:122},
     {r:146, g:165, b:216},
@@ -177,7 +187,8 @@ playerDeath = function(player){
     });
 
     db.highscore.insert({name:player.name,score:player.score});
-        
+    updateHighscore();
+    
     player.laenge = 5;
     player.score = 0;
 }
@@ -195,6 +206,8 @@ onConnect = function(socket, name){
     COLORS.splice(rand,1);
 
     player.initialize();
+    updateHighscore();
+
 
     PLAYER_LIST[player.id] = player;
 
@@ -282,7 +295,6 @@ setInterval(function(){
         for(var i in PLAYER_LIST){
             var player = PLAYER_LIST[i];
             player.update();
-            target.update();
             data.push({
                 snakex:player.snakex,
                 snakey:player.snakey,
@@ -292,12 +304,16 @@ setInterval(function(){
                 color:player.color,
             });    
         }
-    
+
+    target.update();
+
     var pack = {
         player:data,
         goal:target,
+        highscore:highscoredata,
     }
-   
+    
+
     for(var i in SOCKET_LIST){
         var socket = SOCKET_LIST[i];
         socket.emit('newPositions',pack);

@@ -37,7 +37,7 @@
              </div>
                 
             <div class="container-middle">
-                <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+                <canvas id="ctx" width="500" height="500" style="border:1px solid #ffffff;"></canvas>
             </div>
                     
             <div class="container-right">
@@ -117,8 +117,9 @@
         
                 for(var i = 0 ; i < data.player.length; i++){
         
+                    //SCORE-BOARD
+
                     scoreBoard.innerHTML += '<div style="color: rgb('+data.player[i].color.r +','+data.player[i].color.g +','+data.player[i].color.b+')">' + data.player[i].name + ": " + data.player[i].score+ '</div>';
-        
         
                     var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
         

@@ -84,7 +84,11 @@
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,500,500);
 
+        scoreBoard.innerHTML = "";
+
         for(var i = 0 ; i < data.player.length; i++){
+
+            scoreBoard.innerHTML += '<div style="color: rgb('+data.player[i].color.r +','+data.player[i].color.g +','+data.player[i].color.b+')">' + data.player[i].name + ": " + data.player[i].score+ '</div>';
 
 
             var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
@@ -99,7 +103,7 @@
             //+(25-ctx.measureText(data.player.score).width)/2
             ctx.fillStyle = "white"
             
-            ctx.fillText(data.player[i].score,data.player[i].snakex[0]*pq + pq/2  ,data.player[i].snakey[0]*pq+pq/2);      
+            //ctx.fillText(data.player[i].score,data.player[i].snakex[0]*pq + pq/2  ,data.player[i].snakey[0]*pq+pq/2);      
 
         }
 

@@ -319,6 +319,7 @@ setInterval(function(){
                 yplus:player.yplus,
                 score:player.score,
                 color:player.color,
+                name:player.name,
             });    
         }
 

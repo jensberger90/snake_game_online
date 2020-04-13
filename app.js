@@ -204,7 +204,16 @@ playerDeath = function(player){
         }
     });
 
-    db.highscore.insert({name:player.name,score:player.score});
+
+    db.highscore.find().sort({score: 1}, function (err, docs) {
+        highscoredata = docs;
+    })
+
+    console.log(highscoredata);
+
+    //db.highscore.insert({name:player.name,score:player.score,color:player.color});
+    
+    
     updateHighscore();
     
     player.laenge = PLAYERSTARTLENGTH;

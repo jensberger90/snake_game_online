@@ -25,6 +25,8 @@ target.generate();
 var DEBUG = true;
 var PLAYERSTARTLENGTH = 5;
 
+var GAME_SPEED = 80;
+
 var highscoredata;
 
 updateHighscore = function(){
@@ -101,7 +103,7 @@ function Target(){
         } while (check)
 
 
-        this.starttime = getRandomInt(30, 70);
+        this.starttime = getRandomInt((1000/GAME_SPEED)*3, (1000/GAME_SPEED)*7);
         this.time = this.starttime;
     }
 
@@ -333,5 +335,5 @@ setInterval(function(){
         var socket = SOCKET_LIST[i];
         socket.emit('newPositions',pack);
     }
-},100);
+}, GAME_SPEED);
 

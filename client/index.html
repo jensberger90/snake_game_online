@@ -105,10 +105,31 @@
 
 
         // Red rectangle
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(data.goal.px*pq+1, data.goal.py*pq+1, pq-1, pq-1);
-        ctx.fillStyle = "white"
-        ctx.fillText(Math.floor(data.goal.time/10),data.goal.px*pq+pq/2 ,data.goal.py*pq+pq/2);
+        ctx.fillStyle = "white";
+        ctx.fillRect(data.goal.px*pq, data.goal.py*pq, pq, pq);
+
+        ctx.fillStyle = "black"
+        //ctx.fillStyle = "red"
+        
+        //Zeit Anzeige
+        var prozent = (data.goal.time / data.goal.starttime)
+        
+
+
+        //ctx.fillRect(data.goal.px*pq+1, data.goal.py*pq+1, prozent*(pq-1), pq-1);
+
+
+//      #####----
+//      |       |
+//      |       |
+//      ---------
+
+
+
+
+ 
+       
+        //ctx.fillText(prozent,data.goal.px*pq+pq/2 ,data.goal.py*pq+pq/2);
             
             //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
             

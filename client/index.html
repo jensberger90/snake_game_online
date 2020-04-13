@@ -22,87 +22,41 @@
         <meta name="msapplication-TileImage" content="/favicon.ico/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
 
-<<<<<<< Updated upstream
-<div id="gameDiv" class="gameDiv" style="display: none;">
-    <div class="container-left">
-            <div id="scoreBoard" class="board">
-            </div>
-    </div>
-=======
-        
-
->>>>>>> Stashed changes
-
     </head>
 
     <body>
         <div id="gameDiv" class="gameDiv" style="display: none;">
             <div class="container-left">
-                    <div id="scoreBoard" class="board">
-                    </div>
-        
-                    <div id="highscoreBoard" class="board">
-                    </div>
-            </div>
-        
+                <div id="scoreBoard" class="board">
+                </div>
+                
+                <div id="highscoreBoard" class="board">
+                </div>
+             </div>
+                
             <div class="container-middle">
                 <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
             </div>
-        
+                    
             <div class="container-right">
                 <div id="chat-text" class="chat" style="width:100%;height:500px">            
                 </div>
                 <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
             </div>
-        
+                    
         </div>
-<<<<<<< Updated upstream
-        <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
-    </div>
 
-</div>
-
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-<link rel="stylesheet" href="/client/clients.css">
-
-<div id="signDiv">
-    <input id="signDiv-username" type="text" placeholder="Name" required></input><br>
-    <button class="button" id="signDiv-signIn">Los Gehts</button>
-    
-</div>
-
-
-
-
-
-<script>
-    var socket = io();
-    
-    //game
-
-    var ctx = document.getElementById("ctx").getContext("2d");
-    var signDiv = document.getElementById('signDiv');
-    var signDivUsername = document.getElementById('signDiv-username');
-    var signDivSignIn = document.getElementById('signDiv-signIn');
-
-
-    var chatText = document.getElementById('chat-text');
-    var chatInput = document.getElementById('chat-input');
-    var scoreBoard = document.getElementById('scoreBoard');
-
-    signDivSignIn.onclick = function(){
-        signIn();
-    }
-=======
->>>>>>> Stashed changes
 
         <div id="signDiv">
             <input id="signDiv-username" type="text" placeholder="Name" required></input><br>
             <button class="button" id="signDiv-signIn">Los Gehts</button>
-            
         </div>
-    
+
+
+
+
         <script>
+
             var socket = io();
             
             //game
@@ -258,14 +212,6 @@
         </script>
     
     </body>
-
-<<<<<<< Updated upstream
-        // Red rectangle
-        ctx.fillStyle = "white";
-        ctx.fillRect(data.goal.px*pq, data.goal.py*pq, pq, pq);
-=======
-
->>>>>>> Stashed changes
 
 </html>
 

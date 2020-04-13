@@ -3,6 +3,9 @@
     <div class="container-left">
             <div id="scoreBoard" class="board">
             </div>
+
+            <div id="highscoreBoard" class="board">
+            </div>
     </div>
 
     <div class="container-middle">
@@ -44,6 +47,7 @@
     var chatText = document.getElementById('chat-text');
     var chatInput = document.getElementById('chat-input');
     var scoreBoard = document.getElementById('scoreBoard');
+    var highscoreBoard = document.getElementById('highscoreBoard');
 
     signDivSignIn.onclick = function(){
         signIn();
@@ -107,6 +111,10 @@
 
         }
 
+
+        if(data.highscore != undefined){
+            console.log(data.highscore);
+        }
 
         // Red rectangle
         ctx.fillStyle = "white";

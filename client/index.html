@@ -1,17 +1,62 @@
+<html>
+    <head>
+        
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <link rel="stylesheet" href="/client/clients.css">
 
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicon.ico/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicon.ico/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon.ico/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon.ico/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon.ico/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon.ico/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon.ico/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon.ico/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/favicon.ico/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon.ico/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico/favicon-16x16.png">
+        <link rel="manifest" href="/favicon.ico/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/favicon.ico/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+<<<<<<< Updated upstream
 <div id="gameDiv" class="gameDiv" style="display: none;">
     <div class="container-left">
             <div id="scoreBoard" class="board">
             </div>
     </div>
+=======
+        
 
-    <div class="container-middle">
-        <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
-    </div>
+>>>>>>> Stashed changes
 
-    <div class="container-right">
-        <div id="chat-text" class="chat" style="width:100%;height:500px">            
+    </head>
+
+    <body>
+        <div id="gameDiv" class="gameDiv" style="display: none;">
+            <div class="container-left">
+                    <div id="scoreBoard" class="board">
+                    </div>
+        
+                    <div id="highscoreBoard" class="board">
+                    </div>
+            </div>
+        
+            <div class="container-middle">
+                <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+            </div>
+        
+            <div class="container-right">
+                <div id="chat-text" class="chat" style="width:100%;height:500px">            
+                </div>
+                <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
+            </div>
+        
         </div>
+<<<<<<< Updated upstream
         <input id="chat-input" class="chat-input" type="text" style="width:100%"></input>
     </div>
 
@@ -48,134 +93,189 @@
     signDivSignIn.onclick = function(){
         signIn();
     }
+=======
+>>>>>>> Stashed changes
 
-    
-    signDivUsername.onkeydown = function(e){
-        if(e.keyCode == 13){
-            signIn();
-        }
-    }
-
-    function signIn(){
-        if(signDivUsername.value != ""){
-            socket.emit('signIn',{name:signDivUsername.value});
-        } else {
-            alert("Gib einen Namen an!");
-        }
-    }
-
-    socket.on('signInResponse',function(data){
-        if(data.success){
-            signDiv.style.display = 'none';
-            gameDiv.style.display = 'flex';
-        } else
-            alert("Die maximale Spielerzahl auf dem Server ist erreicht.");
-    });
-
-
-    ctx.font = '8px Arial';
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    var pq = 10;
-
-    socket.on('newPositions',function(data){
-        ctx.clearRect(0,0,500,500);
-        ctx.fillStyle = "black";
-        ctx.fillRect(0,0,500,500);
-
-        scoreBoard.innerHTML = "";
-
-        for(var i = 0 ; i < data.player.length; i++){
-
-            scoreBoard.innerHTML += '<div style="color: rgb('+data.player[i].color.r +','+data.player[i].color.g +','+data.player[i].color.b+')">' + data.player[i].name + ": " + data.player[i].score+ '</div>';
-
-
-            var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
-
-            //console.log(color);
-            for (var i2 in data.player[i].snakex) {
-                ctx.fillStyle = color;
-                ctx.fillRect(data.player[i].snakex[i2]*pq+1,data.player[i].snakey[i2]*pq+1,pq-1,pq-1);         
-            } 
-
-
-            //+(25-ctx.measureText(data.player.score).width)/2
-            ctx.fillStyle = "white"
+        <div id="signDiv">
+            <input id="signDiv-username" type="text" placeholder="Name" required></input><br>
+            <button class="button" id="signDiv-signIn">Los Gehts</button>
             
-            //ctx.fillText(data.player[i].score,data.player[i].snakex[0]*pq + pq/2  ,data.player[i].snakey[0]*pq+pq/2);      
+        </div>
+    
+        <script>
+            var socket = io();
+            
+            //game
+        
+            var ctx = document.getElementById("ctx").getContext("2d");
+            var signDiv = document.getElementById('signDiv');
+            var signDivUsername = document.getElementById('signDiv-username');
+            var signDivSignIn = document.getElementById('signDiv-signIn');
+        
+        
+            var chatText = document.getElementById('chat-text');
+            var chatInput = document.getElementById('chat-input');
+            var scoreBoard = document.getElementById('scoreBoard');
+            var highscoreBoard = document.getElementById('highscoreBoard');
+        
+            signDivSignIn.onclick = function(){
+                signIn();
+            }
+        
+            
+            signDivUsername.onkeydown = function(e){
+                if(e.keyCode == 13){
+                    signIn();
+                }
+            }
+        
+            function signIn(){
+                if(signDivUsername.value != ""){
+                    socket.emit('signIn',{name:signDivUsername.value});
+                } else {
+                    alert("Gib einen Namen an!");
+                }
+            }
+        
+            socket.on('signInResponse',function(data){
+                if(data.success){
+                    signDiv.style.display = 'none';
+                    gameDiv.style.display = 'flex';
+                } else
+                    alert("Die maximale Spielerzahl auf dem Server ist erreicht.");
+            });
+        
+        
+            ctx.font = '8px Arial';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+        
+            var pq = 10;
+        
+            socket.on('newPositions',function(data){
+                ctx.clearRect(0,0,500,500);
+                ctx.fillStyle = "black";
+                ctx.fillRect(0,0,500,500);
+        
+                scoreBoard.innerHTML = "";
+        
+                for(var i = 0 ; i < data.player.length; i++){
+        
+                    scoreBoard.innerHTML += '<div style="color: rgb('+data.player[i].color.r +','+data.player[i].color.g +','+data.player[i].color.b+')">' + data.player[i].name + ": " + data.player[i].score+ '</div>';
+        
+        
+                    var color = 'rgb('+data.player[i].color.r + ',' + data.player[i].color.g + ',' + data.player[i].color.b+')';
+        
+                    //console.log(color);
+                    for (var i2 in data.player[i].snakex) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(data.player[i].snakex[i2]*pq+1,data.player[i].snakey[i2]*pq+1,pq-1,pq-1);         
+                    } 
+        
+        
+                    //+(25-ctx.measureText(data.player.score).width)/2
+                    ctx.fillStyle = "white"
+                    
+                    //ctx.fillText(data.player[i].score,data.player[i].snakex[0]*pq + pq/2  ,data.player[i].snakey[0]*pq+pq/2);      
+        
+                }
+        
+        
+                if(data.highscore != undefined){
+                    console.log(data.highscore);
+                }
+        
+                // Red rectangle
+                ctx.fillStyle = "white";
+                ctx.fillRect(data.goal.px*pq, data.goal.py*pq, pq, pq);
+        
+                ctx.fillStyle = "black"
+                //ctx.fillStyle = "red"
+                
+                //Zeit Anzeige
+                var prozent = (data.goal.time / data.goal.starttime)
+                
+        
+        
+                //ctx.fillRect(data.goal.px*pq+1, data.goal.py*pq+1, prozent*(pq-1), pq-1);
+        
+        
+        //      #####----
+        //      |       |
+        //      |       |
+        //      ---------
+        
+        
+        
+        
+         
+               
+                //ctx.fillText(prozent,data.goal.px*pq+pq/2 ,data.goal.py*pq+pq/2);
+                    
+                    //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
+                    
+                    
+                    
+            });
+           
+        
+            socket.on('addToChat',function(data){
+                chatText.innerHTML += '<div style="color: rgb('+data.color.r +','+data.color.g +','+data.color.b+')">' + data.str + '</div>';
+            });
+        
+            socket.on('evalAnswer',function(data){
+                console.log(data);
+            });
+           
+           
+            chatInput.onkeydown = function(e){
+                if(e.keyCode == 13){
+        
+                    e.preventDefault();
+                    if(chatInput.value[0] === '/')
+                        socket.emit('evalServer',chatInput.value.slice(1));
+                    else
+                        socket.emit('sendMsgToServer',chatInput.value);
+                    chatInput.value = '';  
+                }    
+            }
+        
+            document.onkeydown = function(event){
+                if(event.keyCode === 68 || event.keyCode === 39)    //d
+                    socket.emit('keyPress',{inputId:'right'});
+                else if(event.keyCode === 83 || event.keyCode === 40)   //s
+                    socket.emit('keyPress',{inputId:'down'});
+                else if(event.keyCode === 65 || event.keyCode === 37) //a
+                    socket.emit('keyPress',{inputId:'left'});
+                else if(event.keyCode === 87 || event.keyCode === 38) // w
+                    socket.emit('keyPress',{inputId:'up'});
+                   
+            }
+        
+        
+           
+        
+        </script>
+    
+    </body>
 
-        }
-
-
+<<<<<<< Updated upstream
         // Red rectangle
         ctx.fillStyle = "white";
         ctx.fillRect(data.goal.px*pq, data.goal.py*pq, pq, pq);
+=======
 
-        ctx.fillStyle = "black"
-        //ctx.fillStyle = "red"
-        
-        //Zeit Anzeige
-        var prozent = (data.goal.time / data.goal.starttime)
-        
+>>>>>>> Stashed changes
 
-
-        //ctx.fillRect(data.goal.px*pq+1, data.goal.py*pq+1, prozent*(pq-1), pq-1);
-
-
-//      #####----
-//      |       |
-//      |       |
-//      ---------
+</html>
 
 
 
 
- 
-       
-        //ctx.fillText(prozent,data.goal.px*pq+pq/2 ,data.goal.py*pq+pq/2);
-            
-            //ctx.rect(data.player[i].snakex[0],data.player[i].snakey[0],25,25);     
-            
-            
-            
-    });
-   
-
-    socket.on('addToChat',function(data){
-        chatText.innerHTML += '<div style="color: rgb('+data.color.r +','+data.color.g +','+data.color.b+')">' + data.str + '</div>';
-    });
-
-    socket.on('evalAnswer',function(data){
-        console.log(data);
-    });
-   
-   
-    chatInput.onkeydown = function(e){
-        if(e.keyCode == 13){
-
-            e.preventDefault();
-            if(chatInput.value[0] === '/')
-                socket.emit('evalServer',chatInput.value.slice(1));
-            else
-                socket.emit('sendMsgToServer',chatInput.value);
-            chatInput.value = '';  
-        }    
-    }
-
-    document.onkeydown = function(event){
-        if(event.keyCode === 68 || event.keyCode === 39)    //d
-            socket.emit('keyPress',{inputId:'right'});
-        else if(event.keyCode === 83 || event.keyCode === 40)   //s
-            socket.emit('keyPress',{inputId:'down'});
-        else if(event.keyCode === 65 || event.keyCode === 37) //a
-            socket.emit('keyPress',{inputId:'left'});
-        else if(event.keyCode === 87 || event.keyCode === 38) // w
-            socket.emit('keyPress',{inputId:'up'});
-           
-    }
 
 
-   
 
-</script>
+
+
+
+

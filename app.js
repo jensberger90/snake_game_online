@@ -301,9 +301,11 @@ io.sockets.on('connection', function(socket){
             onConnect(socket, data.name);
 
             if(Object.size(PLAYER_LIST) == 1) pq = 25
-            if(Object.size(PLAYER_LIST) == maxPlayer) pq = 10
-            if(Object.size(PLAYER_LIST) < maxPlayer/2) pq = 20
-            if(Object.size(PLAYER_LIST) > maxPlayer/2) pq = 12.5
+            if(Object.size(PLAYER_LIST) == 2) pq = 25
+            if(Object.size(PLAYER_LIST) == 3) pq = 20
+            if(Object.size(PLAYER_LIST) == 4) pq = 12.5
+            if(Object.size(PLAYER_LIST) == 5) pq = 10
+
 
             socket.emit('signInResponse',{success:true,pq:pq});  
         } else {

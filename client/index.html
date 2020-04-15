@@ -62,7 +62,8 @@
         <script>
 
             var socket = io();
-            
+            var pq;
+
             //game
         
             var ctx = document.getElementById("ctx").getContext("2d");
@@ -99,6 +100,7 @@
                 if(data.success){
                     signDiv.style.display = 'none';
                     gameDiv.style.display = 'flex';
+                    pq = data.pq;
                 } else
                     alert("Die maximale Spielerzahl auf dem Server ist erreicht.");
             });
@@ -108,7 +110,6 @@
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
         
-            var pq = 10;
         
             socket.on('newPositions',function(data){
                 ctx.clearRect(0,0,500,500);

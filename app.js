@@ -19,9 +19,9 @@ var PLAYER_LIST = {};
 var SOCKET_LIST = {};
 var WIDTH = 500;
 var HEIGHT = 500;
-var pq = 10;
+var pq = 25;
 var target = new Target();
-var maxPlayer = 3;
+var maxPlayer = 5;
 target.generate();
 var DEBUG = true;
 var PLAYERSTARTLENGTH = 5;
@@ -154,11 +154,21 @@ function Player(id)
         this.snakex[0] = this.x;
         this.snakey[0] = this.y;
 
-
-        //kollision innerhalb der schlange
-       for (var i = 1; i < this.laenge; i++) {
+        //mit sich selbst
+        for (var i = 1; i < this.laenge; i++) {
             if(this.snakex[0] == this.snakex[i] && this.snakey[0] == this.snakey[i]){
                 playerDeath(this);
+            }
+        }
+
+        //kollision mit anderen schlangen
+        for (var p in PLAYER_LIST) {
+            var player = PLAYER_LIST[p];
+
+            for (var i2 = 1; i2 <  player.snakex.length; i2++) {
+                if(this.snakex[0] == player.snakex[i2] && this.snakey[0] == player.snakey[i2]){
+                    playerDeath(this);
+                }   
             }
         }
 
@@ -284,8 +294,18 @@ io.sockets.on('connection', function(socket){
 
     socket.on('signIn',function(data){
         if(Object.size(PLAYER_LIST) < maxPlayer){
+
+
+
+
             onConnect(socket, data.name);
-            socket.emit('signInResponse',{success:true});  
+
+            if(Object.size(PLAYER_LIST) == 1) pq = 25
+            if(Object.size(PLAYER_LIST) == maxPlayer) pq = 10
+            if(Object.size(PLAYER_LIST) < maxPlayer/2) pq = 20
+            if(Object.size(PLAYER_LIST) > maxPlayer/2) pq = 12.5
+
+            socket.emit('signInResponse',{success:true,pq:pq});  
         } else {
             socket.emit('signInResponse',{success:false});
         }

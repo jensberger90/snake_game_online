@@ -161,7 +161,7 @@ function Player(id)
             }
         }
 
-        //kollision mit anderen schlangen
+        /*/kollision mit anderen schlangen
         for (var p in PLAYER_LIST) {
             var player = PLAYER_LIST[p];
 
@@ -170,7 +170,7 @@ function Player(id)
                     playerDeath(this);
                 }   
             }
-        }
+        }*/
 
         //punkt einsammeln
         if(this.x == target.px && this.y == target.py){
